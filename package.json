@@ -1,0 +1,101 @@
+{
+  "name": "@borderless/defer",
+  "version": "0.0.0",
+  "description": "Tiny, type-safe, JavaScript-native `defer` implementation.",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "module": "./dist.es2015/index.js",
+  "sideEffects": false,
+  "files": [
+    "dist/",
+    "dist.es2015/"
+  ],
+  "scripts": {
+    "prettier": "prettier --write",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --quiet --fix",
+    "format": "npm run prettier -- \"{.,src/**}/*.{js,jsx,ts,tsx,json,css,md,yml,yaml}\"",
+    "build": "rimraf dist/ dist.es2015/ && tsc && tsc -P tsconfig.es2015.json",
+    "specs": "jest --coverage",
+    "test": "npm run lint && npm run build && npm run specs && npm run size",
+    "size": "size-limit",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/borderless/defer.git"
+  },
+  "keywords": [
+    "defer",
+    "go",
+    "dependency",
+    "async",
+    "typescript",
+    "promise",
+    "sync"
+  ],
+  "author": {
+    "name": "Blake Embrey",
+    "email": "hello@blakeembrey.com",
+    "url": "http://blakeembrey.me"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/borderless/defer/issues"
+  },
+  "homepage": "https://github.com/borderless/defer",
+  "size-limit": [
+    {
+      "path": "./dist/index.js",
+      "limit": "200 B"
+    }
+  ],
+  "jest": {
+    "roots": [
+      "<rootDir>/src/"
+    ],
+    "transform": {
+      "\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,md,yml,yaml}": "npm run prettier"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^4.3.1",
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.10",
+    "@typescript-eslint/eslint-plugin": "^4.4.1",
+    "@typescript-eslint/parser": "^4.4.1",
+    "eslint": "^7.11.0",
+    "eslint-config-prettier": "^6.13.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.3.0",
+    "jest": "^26.5.3",
+    "lint-staged": "^10.4.2",
+    "prettier": "^2.1.2",
+    "rimraf": "^3.0.2",
+    "size-limit": "^4.6.0",
+    "ts-expect": "^1.1.0",
+    "ts-jest": "^26.4.1",
+    "typescript": "^4.0.3"
+  }
+}
