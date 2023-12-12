@@ -4,7 +4,7 @@
 export type Deferrable = () => void | Promise<void>;
 
 /**
- * Wraps `fn` and adds `defer` as the first argument. Use `defer(() => ...)` to
+ * Wraps `fn` to allow for deferred functions. Use `yield () => ...` to
  * execute code after the function has been resolved or rejected.
  */
 export function defer<Args extends unknown[], Return>(
@@ -40,7 +40,7 @@ export function defer<Args extends unknown[], Return>(
 export type DeferrableSync = () => void;
 
 /**
- * Wraps `fn` and adds `defer` as the first argument. Use `defer(() => ...)` to
+ * Wraps `fn` to allow for deferred functions. Use `yield () => ...` to
  * execute code after the function has returned or thrown.
  */
 export function deferSync<Args extends unknown[], Return>(
