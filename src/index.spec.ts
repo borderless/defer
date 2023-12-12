@@ -1,20 +1,21 @@
-import { defer, deferSync } from "./index";
+import { describe, it, expect } from "vitest";
+import { defer, deferSync } from "./index.js";
 
 describe("defer", () => {
   it("should defer a callback", async () => {
     let i = 0;
 
-    const fn = defer((defer) => {
-      defer(() => {
+    const fn = defer(function* () {
+      yield () => {
         i++;
         expect(i).toEqual(3);
-      });
+      };
       expect(i).toEqual(0);
 
-      defer(() => {
+      yield () => {
         i++;
         expect(i).toEqual(2);
-      });
+      };
       expect(i).toEqual(0);
 
       i++;
@@ -28,8 +29,8 @@ describe("defer", () => {
   it("should propagate reject", async () => {
     let i = 0;
 
-    const fn = defer((defer) => {
-      defer(() => i++);
+    const fn = defer(function* () {
+      yield () => void i++;
 
       throw new Error("boom");
     });
@@ -40,10 +41,10 @@ describe("defer", () => {
   });
 
   it("should propagate defer error over reject", async () => {
-    const fn = defer((defer) => {
-      defer(() => {
+    const fn = defer(function* () {
+      yield () => {
         throw new Error("1");
-      });
+      };
 
       throw new Error("boom");
     });
@@ -52,10 +53,10 @@ describe("defer", () => {
   });
 
   it("should propagate defer error", async () => {
-    const fn = defer((defer) => {
-      defer(() => {
+    const fn = defer(async function* () {
+      yield () => {
         throw new Error("1");
-      });
+      };
 
       return true;
     });
@@ -64,18 +65,18 @@ describe("defer", () => {
   });
 
   it("should propagate last defer error", async () => {
-    const fn = defer((defer) => {
-      defer(() => {
+    const fn = defer(function* () {
+      yield () => {
         throw new Error("3");
-      });
+      };
 
-      defer(() => {
+      yield () => {
         throw new Error("2");
-      });
+      };
 
-      defer(() => {
+      yield () => {
         throw new Error("1");
-      });
+      };
 
       return true;
     });
@@ -87,17 +88,17 @@ describe("defer", () => {
     it("should defer a callback", () => {
       let i = 0;
 
-      const fn = deferSync((defer) => {
-        defer(() => {
+      const fn = deferSync(function* () {
+        yield () => {
           i++;
           expect(i).toEqual(3);
-        });
+        };
         expect(i).toEqual(0);
 
-        defer(() => {
+        yield () => {
           i++;
           expect(i).toEqual(2);
-        });
+        };
         expect(i).toEqual(0);
 
         i++;
@@ -111,8 +112,8 @@ describe("defer", () => {
     it("should propagate reject", () => {
       let i = 0;
 
-      const fn = deferSync((defer) => {
-        defer(() => i++);
+      const fn = deferSync(function* () {
+        yield () => i++;
 
         throw new Error("boom");
       });
@@ -123,10 +124,10 @@ describe("defer", () => {
     });
 
     it("should propagate defer error over reject", () => {
-      const fn = deferSync((defer) => {
-        defer(() => {
+      const fn = deferSync(function* () {
+        yield () => {
           throw new Error("1");
-        });
+        };
 
         throw new Error("boom");
       });
@@ -135,10 +136,10 @@ describe("defer", () => {
     });
 
     it("should propagate defer error", () => {
-      const fn = deferSync((defer) => {
-        defer(() => {
+      const fn = deferSync(function* () {
+        yield () => {
           throw new Error("1");
-        });
+        };
 
         return true;
       });
@@ -147,18 +148,18 @@ describe("defer", () => {
     });
 
     it("should propagate last defer error", () => {
-      const fn = deferSync((defer) => {
-        defer(() => {
+      const fn = deferSync(function* () {
+        yield () => {
           throw new Error("3");
-        });
+        };
 
-        defer(() => {
+        yield () => {
           throw new Error("2");
-        });
+        };
 
-        defer(() => {
+        yield () => {
           throw new Error("1");
-        });
+        };
 
         return true;
       });
